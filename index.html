@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Click and Drag</title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="icon" href="https://fav.farm/🔥" />
+  </head>
+  <body>
+    <div class="items">
+      <div class="item item1">01</div>
+      <div class="item item2">02</div>
+      <div class="item item3">03</div>
+      <div class="item item4">04</div>
+      <div class="item item5">05</div>
+      <div class="item item6">06</div>
+      <div class="item item7">07</div>
+      <div class="item item8">08</div>
+      <div class="item item9">09</div>
+      <div class="item item10">10</div>
+      <div class="item item11">11</div>
+      <div class="item item12">12</div>
+      <div class="item item13">13</div>
+      <div class="item item14">14</div>
+      <div class="item item15">15</div>
+      <div class="item item16">16</div>
+      <div class="item item17">17</div>
+      <div class="item item18">18</div>
+      <div class="item item19">19</div>
+      <div class="item item20">20</div>
+      <div class="item item21">21</div>
+      <div class="item item22">22</div>
+      <div class="item item23">23</div>
+      <div class="item item24">24</div>
+      <div class="item item25">25</div>
+    </div>
+
+    <script>
+      const slider = document.querySelector(".items");
+      //Selects the .items div (the container holding all the .item elements) and stores it in the slider variable.
+      let isDown = false;
+      // isDown: A boolean to track whether the mouse button is pressed (true when dragging).
+      let startX;
+      // startX: Stores the initial X position of the mouse click.
+      let scrollLeft;
+      // scrollLeft: Stores the initial scroll position of the slider before dragging.
+
+      // Mouse Down Event (mousedown)
+      slider.addEventListener("mousedown", (e) => {
+        isDown = true; // Sets isDown to true, meaning dragging has started.(This flag will be used in mousemove to determine whether to move the slider.)
+        slider.classList.add("active"); // Adds the active class to the slider, which visually changes its style (cursor: grabbing).
+        console.log(e.pageX);
+        // Logs the X-coordinate of the mouse click relative to the entire page.
+        // Example: If you click at x = 383, it logs 383.
+
+        startX = e.pageX - slider.offsetLeft;
+        // e.pageX is the X-coordinate of the mouse click relative to the page.
+        // slider.offsetLeft is the distance of the slider from the left edge of the page.
+        // startX stores the initial position of the mouse relative to the slider itself.
+
+        // Example Calculation:
+        // Suppose e.pageX = 383 and slider.offsetLeft = 0
+        // Then, startX = 383 - 0 = 383
+        // If slider.offsetLeft were 50, then startX = 383 - 50 = 333
+
+        scrollLeft = slider.scrollLeft;
+        // scrollLeft stores the current horizontal scroll position of the slider.
+        // This helps calculate how far the user has scrolled when moving the mouse.
+
+        console.log(startX); // ex. 383
+        console.log(scrollLeft); // ex. 0
+        // Logs the startX (initial mouse position) and scrollLeft (initial scroll position) for debugging.
+      });
+
+      // Mouse Leave Event (mouseleave)
+      slider.addEventListener("mouseleave", () => {
+        // If the mouse leaves the .items container while dragging, it stops the drag effect (isDown = false). Removes the active class to reset the styling.
+        isDown = false;
+        slider.classList.remove("active");
+      });
+
+      // Mouse Up Event (mouseup)
+      slider.addEventListener("mouseup", () => {
+        // If user releases the mouse button, it stops the drag effect (isDown = false). Removes the active class to reset the styling.
+        isDown = false;
+        slider.classList.remove("active");
+      });
+
+      // Mouse Move Event (mousemove)
+      slider.addEventListener("mousemove", (e) => {
+        if (!isDown) return; // if isDown is false, it exits with return;
+        e.preventDefault(); // Prevents default behavior to avoid unwanted text selection while dragging
+
+        // x stores the current mouse X position relative to the slider's left edge.
+        const x = e.pageX - slider.offsetLeft;
+        console.log({ x, startX });
+        // Logs the x (current mouse position) and startX (initial mouse position) for debugging.
+        // ex. { x: 600, startX: 200 }
+
+        // walk calculates how far the mouse has moved horizontally.
+        const walk = (x - startX) * 3;
+        // (x - startX) gives the difference between the current and initial mouse position.
+        // Multiplied by 3 to make the scrolling effect faster.
+        console.log(walk);
+        // Example Calculation:
+        // Suppose startX = 200 and x = 600
+        // walk = (600 - 200) * 3
+        // walk = 400 * 3
+        // walk = 1200
+
+        slider.scrollLeft = scrollLeft - walk;
+        // Updates slider.scrollLeft to move the content left or right.
+        // scrollLeft - walk moves the slider based on how far the user has dragged.
+
+        // Example Calculation:
+        // Suppose scrollLeft = 0 (initial position) and walk = 1200
+        // slider.scrollLeft = 0 - 1200
+        // Moves the content 1200 pixels to the left.
+      });
+    </script>
+  </body>
+</html>
+
+<!-- Summary of How It Works
+1. User presses the mouse (mousedown)
+- Marks isDown = true.
+- Stores startX (initial mouse position relative to the slider).
+- Stores scrollLeft (initial scroll position).
+
+2. User moves the mouse (mousemove)
+- If dragging (isDown = true), calculates the movement distance (walk).
+- Moves slider.scrollLeft accordingly, creating a smooth dragging effect.
+
+3. User releases the mouse (mouseup/mouseleave)
+- isDown = false, stopping the scroll effect.
+
+This creates a smooth click-and-drag scrolling effect where moving the mouse left/right scrolls the .items container. 🚀 -->
